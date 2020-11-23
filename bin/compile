@@ -41,8 +41,8 @@ if [ -n "${APTFILE_ENV}" ]; then
   for PACK in $(echo $APTFILE_ENV | sed "s/,/\n/g"); do
     printf "%s\n"$PACK >> $BUILD_DIR/Aptfile
   done
-  awk -i inplace 'NF' $BUILD_DIR/Aptfile
-  awk -i inplace '!seen[$0]++' $BUILD_DIR/Aptfile
+  awk 'NF' $BUILD_DIR/Aptfile > $BUILD_DIR/Aptfile_new && mv $BUILD_DIR/Aptfile_new $BUILD_DIR/Aptfile
+  awk '!seen[$0]++' $BUILD_DIR/Aptfile > $BUILD_DIR/Aptfile_new && mv $BUILD_DIR/Aptfile_new $BUILD_DIR/Aptfile
 fi
 
 [ -s $BUILD_DIR/Aptfile ] || echo "Apt buildpack: Aptfile file does not exists or it is empty" && exit 0
