@@ -45,7 +45,10 @@ if [ -n "${APTFILE_ENV}" ]; then
   awk '!seen[$0]++' $BUILD_DIR/Aptfile > $BUILD_DIR/Aptfile_new && mv $BUILD_DIR/Aptfile_new $BUILD_DIR/Aptfile
 fi
 
-[ -s $BUILD_DIR/Aptfile ] || echo "Apt buildpack: Aptfile file does not exists or it is empty" 2>&1 | indent && exit 0
+if [ -s $BUILD_DIR/Aptfile ]; then
+  echo "Apt buildpack: Aptfile file does not exists or it is empty" 2>&1 | indent 
+  exit 0
+fi
 
 # Store which STACK we are running on in the cache to bust the cache if it changes
 if [ -f $CACHE_DIR/.apt/STACK ]; then
