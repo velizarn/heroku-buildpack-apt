@@ -46,6 +46,8 @@ if [ -n "${APTFILE_ENV}" ]; then
 fi
 
 if [ -s $BUILD_DIR/Aptfile ]; then
+  :
+else
   echo "Apt buildpack: Aptfile file does not exists or it is empty" 2>&1 | indent 
   exit 0
 fi
