@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 # fail fast
 set -e
@@ -10,6 +10,7 @@ set -e
 # parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 function error() {
@@ -28,6 +29,23 @@ function indent() {
     *)      sed -u "$c";;
   esac
 }
+
+# Get data from APTFILE_ENV config var if present
+if [ -f $ENV_DIR/APTFILE_ENV ]; then
+  export "APTFILE_ENV=$(cat $ENV_DIR/APTFILE_ENV)"
+else
+  APTFILE_ENV=$""
+fi
+
+if [ -n "${APTFILE_ENV}" ]; then
+  for PACK in $(echo $APTFILE_ENV | sed "s/,/\n/g"); do
+    printf "%s\n"$PACK >> $BUILD_DIR/Aptfile
+  done
+  awk -i inplace 'NF' $BUILD_DIR/Aptfile
+  awk -i inplace '!seen[$0]++' $BUILD_DIR/Aptfile
+fi
+
+[ -s $BUILD_DIR/Aptfile ] || echo "Apt buildpack: Aptfile file does not exists or it is empty" && exit 0
 
 # Store which STACK we are running on in the cache to bust the cache if it changes
 if [ -f $CACHE_DIR/.apt/STACK ]; then
