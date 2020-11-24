@@ -35,6 +35,24 @@ heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt
     # or add custom apt repos
     :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
 
+### Config var
+
+You can add config var APTFILE_ENV and enter comma separated list of packages you want to install, e.g.
+
+    # Heroku CLI
+    # https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-ci-config-set
+    heroku config:set APTFILE_ENV=nano
+
+    # Heroku API
+    # https://devcenter.heroku.com/articles/platform-api-reference#config-vars
+    curl --request PATCH \
+      --url https://api.heroku.com/apps/$APP_NAME_OR_ID/config-vars \
+      --header 'Accept: application/vnd.heroku+json; version=3' \
+      --header 'Authorization: Bearer $AUTH_TOKEN' \
+      --data '{
+	    "APTFILE_ENV": "nano,hunspell"
+      }'
+
 #### Gemfile
 
     source "https://rubygems.org"
