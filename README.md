@@ -35,7 +35,7 @@ heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt
     # or add custom apt repos
     :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
 
-### Config var
+#### Config var
 
 You can add config var APTFILE_ENV and enter comma separated list of packages you want to install, e.g.
 
