@@ -73,8 +73,8 @@ APT_SOURCES="$APT_SOURCELIST_DIR/sources.list"
 APT_VERSION=$(apt-get -v | awk 'NR == 1{ print $2 }')
 
 case "$APT_VERSION" in
-  0* | 1.0*) APT_FORCE_YES="--force-yes";;
-  *)         APT_FORCE_YES="--allow-downgrades --allow-remove-essential --allow-change-held-packages";;
+  0* | 1.0*) APT_FORCE_YES=("--force-yes");;
+  *)         APT_FORCE_YES=("--allow-downgrades" "--allow-remove-essential" "--allow-change-held-packages");;
 esac
 
 if [ -f $APT_CACHE_DIR/Aptfile ] && cmp -s $BUILD_DIR/Aptfile $APT_CACHE_DIR/Aptfile && [[ $CACHED_STACK == $STACK ]] ; then
