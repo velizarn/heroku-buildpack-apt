@@ -39,8 +39,8 @@ fi
 
 if [ -n "${APTFILE_ENV}" ]; then
   # APTFILE_ENV is set, creating empty Aptfile
-  touch $BUILD_DIR/Aptfile
-  echo "APNV config variable found, writing to $BUILD_DIR/Aptfile" 2>&1 | indent
+  :> $BUILD_DIR/Aptfile
+  echo "APTFILE_ENV config variable found, writing to $BUILD_DIR/Aptfile" 2>&1 | indent
   for PACK in $(echo $APTFILE_ENV | sed "s/,/\n/g"); do
     printf "%s\n"$PACK >> $BUILD_DIR/Aptfile
   done
