@@ -1,14 +1,14 @@
-# heroku-buildpack-apt [![Build Status](https://travis-ci.org/heroku/heroku-buildpack-apt.svg?branch=master)](https://travis-ci.org/heroku/heroku-buildpack-apt)
+# heroku-buildpack-apt
 
 Add support for apt-based dependencies during both compile and runtime.
 
-Added ability to also specify custom repositories through **:repo:** in `Aptfile` (see example below).
+Added ability to also specify custom repositories through **:repo:** in `Aptfile` OR in config variable (see examples below).
 
 ## Usage
 
 This buildpack is not meant to be used on its own, and instead should be in used in combination with Heroku's [multiple buildpack support](https://devcenter.heroku.com/articles/using-multiple-buildpacks-for-an-app).
 
-Include a list of apt package names to be installed in a file named `Aptfile`
+Include a list of apt package names to be installed in a file named `Aptfile` or in APTFILE_ENV config variable.
 
 ## Example
 
@@ -17,13 +17,13 @@ Include a list of apt package names to be installed in a file named `Aptfile`
 To use the latest stable version:
 
 ```
-heroku buildpacks:add --index 1 heroku-community/apt
+heroku buildpacks:add --index 1 velizarn/heroku-buildpack-apt
 ```
 
 To use the edge version (i.e. the code in this repo):
 
 ```
-heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt
+heroku buildpacks:add --index 1 https://github.com/velizarn/heroku-buildpack-apt
 ```
 
 #### Aptfile
@@ -41,7 +41,7 @@ You can add config var APTFILE_ENV and enter comma separated list of packages yo
 
     # Heroku CLI
     # https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-ci-config-set
-    heroku config:set APTFILE_ENV=nano
+    heroku config:set APTFILE_ENV=nano,jq
 
     # Heroku API
     # https://devcenter.heroku.com/articles/platform-api-reference#config-vars
@@ -53,19 +53,10 @@ You can add config var APTFILE_ENV and enter comma separated list of packages yo
 	    "APTFILE_ENV": "nano,hunspell"
       }'
 
-#### Gemfile
+    # Heroku app UI
+    Go to your app > Settings > Config Vars
 
-    source "https://rubygems.org"
-    gem "pg"
-
-### Check out the PG library version
-
-    $ heroku run bash -a apt-pg-test
-    ~ $ irb
-	irb(main):001:0> require "pg"
-	=> true
-	irb(main):002:0> PG::version_string
-	=> "PG 0.15.1"
+If the APTFILE_ENV config variable is set, the Aptfile will be recreated and only the apps listed in the APTFILE_ENV variable will be installed. Otherwise, the existing Aptfile is taken into account.
 
 ## License
 
